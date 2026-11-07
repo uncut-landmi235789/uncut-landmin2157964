@@ -1,0 +1,33 @@
+name: APK Auto Upload 8h
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */8 * * *'
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Récupérer le code du dépôt
+        uses: actions/checkout@v4
+
+      - name: 🐍 Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'  # Changé de '3.9' à '3.11' (ou '3.10' / '3.12')
+
+      - name: 🌐 Installer Google Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: 📦 Installer les bibliothèques Python
+        run: |
+          pip install --upgrade pip
+          pip install DataRecorder DownloadKit DrissionPage requests
+
+      - name: 🚀 Lancer le script d'upload
+        run: python upload6.py
